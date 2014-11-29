@@ -1,0 +1,62 @@
+<template name="search">
+  <button type="button" class="btn btn-link btnCloseFancy pull-right">×</button>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 h1 search-title">
+        <h1 class="hidden-xs">Search results "{{searchTerm}}": </h1>
+        <input type="text" class="col-xs-10 inline-search visible-xs" placeholder="Search…">
+      </div>
+      {{#if results.artists}}
+        <h2 class="col-xs-12">Artists:</h2>
+        {{#each results.artists}}
+          {{> artist}}
+        {{/each}}
+      {{/if}}
+
+      {{#if results.albums}}
+        <h2 class="col-xs-12">Albums:</h2>
+        {{#each results.albums}}
+          {{> album}}
+        {{/each}}
+      {{/if}}
+      {{#if results.tracks}}
+        <h2 class="col-xs-12">Songs:</h2>
+        <div class="col-xs-12">
+          <ul class="media-list tracklist">
+          {{#each results.tracks}}
+            <li class="media track-item">
+              {{> track}}
+              {{> actions}}
+            </li>
+          {{/each}}
+          </ul>
+        </div>  
+      {{/if}}
+      {{#if results.podcasts}}
+        <h2 class="col-xs-12">Podcasts:</h2>
+        {{#each results.podcasts}}
+          {{> album}}
+        {{/each}}
+      {{/if}}
+      {{#if results.episodes}}
+        <h2 class="col-xs-12">Podcast Episodes:</h2>
+        <div class="col-xs-12">
+          <ul class="media-list tracklist">
+            {{#each results.episodes}}
+              <li class="media track-item">
+                {{> track}}
+                {{> actions}}
+              </li>
+            {{/each}}
+          </ul>
+        </div>    
+      {{/if}}
+      {{#if results.stations}}
+        <h2 class="col-xs-12">Radio Stations:</h2>
+        {{#each results.stations}}
+          {{> album}}
+        {{/each}}
+      {{/if}}
+    </div>
+  </div>  
+</template>

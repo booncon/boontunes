@@ -1,0 +1,23 @@
+<template name="playing">
+   <div class="cover-wrap">
+    <div class="cover-container" style="background-image: url({{#unless currentAlbumCover.extralarge}}/img/default_cover.png{{else}}{{currentAlbumCover.extralarge}}{{/unless}})"></div>
+    <div class="progress-bar-wrap">
+      <div class="slider-label progress-taken pull-left"><small>{{currentTimeTaken}}</small></div>
+      <div class="slider-label progress-left pull-right"><small>-{{currentTimeLeft}}</small></div>
+      <input id="progress-bar" class="progress-bar" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="0.5" data-slider-value="0">
+    </div>
+    <div class="container">
+      <div class="song-info">
+        <div class="media">
+          <a class="media-left media-middle" href="#">
+            <img class="main-cover" src="{{#unless currentAlbumCover.medium}}/img/default_cover.png{{else}}{{currentAlbumCover.medium}}{{/unless}}" alt="{{currentArtistName}} - {{currentAlbumName}} cover">
+          </a>
+          <div class="media-body media-middle">
+            <h2 class="media-heading">{{currentSongName}}</h2>
+            <h3>{{currentArtistName}} – {{currentAlbumName}}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

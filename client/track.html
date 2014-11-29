@@ -1,0 +1,10 @@
+<template name="track">
+  <span class="media-left media-middle">
+    <img class="list-cover" width="48px" heigth="48px" data-pos="{{pos}}" src="/img/default_cover.png" alt="cover art {{artist}} - {{album}}">    
+  </span>
+  <div class="media-body media-middle">
+    <h4 class="media-heading">{{#if isCurrent}}<span class="glyphicon {{#unless isPlaying}}glyphicon-pause{{else}}glyphicon-play{{/unless}} play-icon"> </span>{{/if}} {{name}}</h4>
+    {{#if artist}}{{artist}} – {{/if}}{{album}}
+  </div>
+  {{#if length}}<span class="media-length">{{length}}</span>{{/if}}
+</template>

@@ -1,0 +1,11 @@
+<template name="album">
+  <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+    <a href="#" class="thumbnail search-result" title="{{#if album_artist}}{{album_artist}} – {{/if}}{{name}}">
+      <img class="search-image" src="/img/default_cover.png" alt="picture {{name}}">
+      <div class="caption">
+        <h4 class="text-ellipsis">{{name}}</h4>
+        {{#if album_artist}}<h5 class="text-ellipsis">{{album_artist}}</h5>{{/if}}
+      </div>
+    </a>
+  </div>
+</template>

@@ -1,0 +1,22 @@
+<template name="playlists">
+  <button type="button" class="btn btn-link btnCloseFancy pull-right">×</button>
+  <div class="container">
+    <div class="row">
+      <h2 class="col-xs-12 page-title">Playlists:</h2>
+      <div class="col-md-4 scroll-content">
+        <div class="list-group">
+        {{#each playlists}}
+          <a class="list-group-item playlist-item" data-uri="{{uri}}" href="#">{{name}}{{> actions}}</a>
+        {{/each}}
+        </div>
+      </div>
+      <div class="col-md-8 scroll-content">
+        <div class="list-group">
+        {{#each playlistSongs}}
+          <a class="list-group-item" data-uri="{{uri}}" href="#"><b>{{name}}</b><br>{{#each album.artists}}{{name}}{{/each}} – {{album.name}}{{> actions}}</a>
+        {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>  
+</template>

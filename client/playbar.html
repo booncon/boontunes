@@ -1,0 +1,34 @@
+<template name="playbar">
+  <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="btn-group navbar-left" role="group">
+            <button type="button" class="btn btn-default btn-link navbar-btn previousBtn glyphicon glyphicon-backward"></button>
+            <button type="button" class="btn btn-default btn-link navbar-btn playBtn glyphicon {{#unless playing}}glyphicon-pause{{else}}glyphicon-play{{/unless}}"></button>
+            <button type="button" class="btn btn-default btn-link navbar-btn nextBtn glyphicon glyphicon-forward"></button>
+            <span class="glyphicon glyphicon-refresh loading-spinner"></span>
+          </div>
+          <div class="navbar-right">
+            <button type="button" class="btn btn-default btn-primary btn-round navbar-btn glyphicon glyphicon-resize-full resizeBtn pull-right hidden-xs"></button>
+            <span class="pull-right spacer hidden-xs">|</span>
+            <button type="button" class="btn btn-default btn-primary btn-round navbar-btn glyphicon glyphicon-repeat rptBtn pull-right {{#unless repeat}}off{{/unless}}"></button>
+            <button type="button" class="btn btn-default btn-primary btn-round navbar-btn glyphicon glyphicon-random rndBtn pull-right {{#unless shuffle}}off{{/unless}}"></button>
+            <div class="pull-right volume-wrap">
+              <button type="button" class="btn btn-default btn-primary btn-round navbar-btn glyphicon {{#if mute}}glyphicon-volume-off{{else}}glyphicon-volume-up{{/if}} volBtn"></button>
+              <div class="volume-bar-wrap">
+                <input id="volume-bar" class="progress-bar volume-bar" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="0.5" data-slider-value="{{volume}}">
+              </div>
+            </div>
+          </div>
+          <span class="pull-right spacer">|</span>
+          <span class="pull-right spacer">|</span>
+          <button type="button" class="btn btn-default btn-primary btn-round navbar-btn glyphicon glyphicon-search srcBtn pull-right"></button>
+          <input type="text" class="form-control search-field pull-right hidden-xs" placeholder="Search…">
+          <span class="pull-right spacer hidden-xs">|</span>
+          <button type="button" class="btn btn-default btn-primary btn-round navbar-btn glyphicon glyphicon-th-list plsBtn pull-right"></button>
+        </div>
+      </div>
+    </div>
+  </nav>
+</template>

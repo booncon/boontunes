@@ -1,0 +1,19 @@
+<template name="tracklist">
+  {{> playing}}
+  <div class="scroll-content">
+    <div class="container">
+      <div class="row"> 
+        <div class="col-xs-12">
+          <ul class="media-list tracklist">
+          {{#each tracks}}
+            <li class="media track-item">
+              {{> track}}
+              {{> actions}}
+            </li>
+          {{/each}}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
