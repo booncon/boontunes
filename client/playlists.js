@@ -18,7 +18,6 @@ Template.playlists.events({
   'click .playlist-item': function (e) {
     if ($(e.target).closest('.dropdown-toggle').length <= 0) {
       Session.set('playlistSongs', Session.get('playlists')[$(e.target).index()].tracks);
-      console.log(e);
     }
   }
 });

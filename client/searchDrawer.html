@@ -1,0 +1,16 @@
+<template name="searchDrawer">
+  <div class="drawer">
+    <div class="drawer-content col-xs-12">
+      <div class="search-drawer-title action-item" data-uri="{{selectedURI}}">
+        <h3>{{selectedDate}} {{#if selectedArtist}}{{selectedArtist}} – {{/if}}{{selectedAlbum}}</h3>
+        {{> actions}}
+      </div>
+      <ol class="album-tracklist">
+      {{#each selectedContent}}
+        <li>{{name}}<span class="pull-right">{{length}}</span></li>
+      {{/each}}
+      </ol>
+      <div class="clear"></div>
+    </div>
+  </div>
+</template>

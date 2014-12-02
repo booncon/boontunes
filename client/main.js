@@ -13,6 +13,6 @@ $.getScript('http://' + Session.get('MOPIDY_URL') + '/mopidy/mopidy.min.js', fun
     webSocketUrl: 'ws://' + Session.get('MOPIDY_URL') + ':' + Session.get('MOPIDY_PORT') + '/mopidy/ws/'
   });
   // mopidy.on(console.log.bind(console));  // Log all events
-  console.log(mopidy);
+  // console.log(mopidy);
   mopidyEvents(mopidy); // react to mopidy events
 });

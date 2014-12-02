@@ -1,30 +1,60 @@
 <template name="search">
   <button type="button" class="btn btn-link btnCloseFancy pull-right">×</button>
-  <div class="container">
+  <div class="container" id="searchr">
     <div class="row">
       <div class="col-xs-12 h1 search-title">
-        <h1 class="hidden-xs">Search results "{{searchTerm}}": </h1>
+        <h1 class="hidden-xs">Search results "{{query}}": </h1>
         <input type="text" class="col-xs-10 inline-search visible-xs" placeholder="Search…">
       </div>
-      {{#if results.artists}}
-        <h2 class="col-xs-12">Artists:</h2>
-        {{#each results.artists}}
-          {{> artist}}
+      <!-- {{#if results.uri}}
+        <h2 class="col-xs-12">This looks like a playable item:</h2>
+        <ul class="media-list tracklist">              
+        {{#each results.uri}}
+          <li class="media track-item action-item" data-uri="{{uri}}">
+            {{name}} – {{uri}}
+            {{> actions}}
+          </li>
         {{/each}}
+      {{/if}} -->
+
+      {{#if results.uri}}
+        <div class="search-artists search-section">
+          <div class="col-xs-12">
+            <ul class="media-list tracklist">    
+            {{#each results.uri}}
+              <li class="media track-item action-item" data-uri="{{uri}}">
+                <h3>{{name}}: {{uri}}</h3>
+                {{> actions}}
+              </li>
+            {{/each}}
+            </ul>
+          </div>  
+        </div>  
+      {{/if}}
+
+      {{#if results.artists}}
+        <div class="search-artists search-section">
+          <h2 class="col-xs-12">Artists:</h2>
+          {{#each results.artists}}
+            {{> artist}}
+          {{/each}}
+        </div>  
       {{/if}}
 
       {{#if results.albums}}
-        <h2 class="col-xs-12">Albums:</h2>
-        {{#each results.albums}}
-          {{> album}}
-        {{/each}}
+        <div class="search-albums search-section">
+          <h2 class="col-xs-12">Albums:</h2>
+          {{#each results.albums}}
+            {{> album}}
+          {{/each}}
+        </div>  
       {{/if}}
       {{#if results.tracks}}
         <h2 class="col-xs-12">Songs:</h2>
         <div class="col-xs-12">
           <ul class="media-list tracklist">
           {{#each results.tracks}}
-            <li class="media track-item">
+            <li class="track-item action-item" data-uri="{{uri}}">
               {{> track}}
               {{> actions}}
             </li>
@@ -43,7 +73,7 @@
         <div class="col-xs-12">
           <ul class="media-list tracklist">
             {{#each results.episodes}}
-              <li class="media track-item">
+              <li class="media track-item action-item" data-uri="{{uri}}">
                 {{> track}}
                 {{> actions}}
               </li>
@@ -58,5 +88,5 @@
         {{/each}}
       {{/if}}
     </div>
-  </div>  
+  </div>
 </template>

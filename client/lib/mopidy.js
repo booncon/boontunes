@@ -72,12 +72,17 @@ seekTrack = function (pos) {
 // update the information on what's currently playing
 updateCurrentPlayInformation = function () {
   mopidy.playback.getCurrentTrack().then(function (track) {
+    var artists = [];
     getCover(track.artists[0].name, track.album.name);
     Session.set('currentSongName', track.name);
-    Session.set('currentArtistName', track.artists[0].name);
+    $.each(track.artists, function(index, el) {
+      artists.push(el.name);
+    });
+    Session.set('currentArtistName', artists.join('/ '));
     Session.set('currentAlbumName', track.album.name);
     Session.set('currentTrackLength', track.length);
     Session.set('currentTrackURI', track.uri);
+    notify(Session.get('currentSongName'), Session.get('currentArtistName') + ' – ' + Session.get('currentAlbumName'));
   });
 };
 
@@ -124,15 +129,18 @@ updateVolumeState = function () {
   });
 };
 
-addToPlaylist = function (uri) {
-  mopidy.tracklist.clear();
-  mopidy.tracklist.add(uri).catch(console.error.bind(console)).then(function (tlTracks) {
-    // return mopidy.playback.play(tlTracks[0]);
-    updateTracklist();
-    console.log('playlist loaded');
-    console.log(tlTracks);
+addToTracklist = function (uri, clear) {
+  if (clear) {
+    mopidy.tracklist.clear();
+  }
+  mopidy.library.lookup(uri).then(function (e) {
+    return mopidy.tracklist.add(e).then(function (tlTracks) {
+      if (clear) {
+        mopidy.playback.play(tlTracks[0]);
+      }
+      updateTracklist();
+    });
   });
-  
 };
 
 // update the current tracklist
@@ -164,83 +172,105 @@ updateTracklist = function () {
       tracklist[i] = track;
     }
     Session.set('tracks', tracklist);
+    showLoader(false);
+  });
+};
+
+lookupSelection = function (uri) {
+  mopidy.library.lookup(uri).then(function (e) {
+    var length, selectedContent;
+    selectedContent = [];
+    $.each(e, function(index, el) {
+      length = convertMS(el.length);
+      el.length = length.h !== 0 ? pad(length.h) + ':' : '' + pad(length.m) + ':' + pad(length.s);
+      selectedContent.push(el);
+    });
+    Session.set('selectedContent', selectedContent);
   });
 };
 
 updatePlaylists = function () {
-  console.log('playlists');
   mopidy.playlists.getPlaylists().then(function (e) {
     Session.set('playlists', e);
   });
 };
 
 doSearch = function (query) {
-  Session.set("searchTerm", query);
-  if (Session.get("searchTerm") !== '') {
-    Router.go('/search');
-    delay(function () {
-      $('.loading-spinner').fadeIn();
-      mopidy.library.search({'any': [Session.get("searchTerm")]}).then(function (data) {
-        var results = {};
-        results.artists = [];
-        for (var i = 0; i < data.length; i++) {
-          if (data[i].artists !== undefined) {
-            for (var j = 0; j < data[i].artists.length; j++) {
-              results.artists.push(data[i].artists[j]);
-            }
-          }
-        }
-        results.albums = [];
-        results.podcasts = [];
-        for (var i = 0; i < data.length; i++) {
-          if (data[i].albums !== undefined) {
-            for (var j = 0; j < data[i].albums.length; j++) {
-              var album, artist;
-              album = data[i].albums[j];
-              if (album.uri.indexOf('podcast:') === 0) {
-                results.podcasts.push(album);
-              } else {
-                artist = album.artists[0].name;
-                album.album_artist = artist;
-                results.albums.push(album);
+  if (query !== '') {
+    var results = {};
+    Session.set('results', []);
+    Router.go('/search/' + query);
+
+    if (/^[0-z]+:[0-z]+$/.test(query)) {
+      results.uri = [];
+      results.uri[0] = {'name': 'Play this item', 'uri': query};
+      Session.set('results', results);
+    } else {
+      delay(function () {
+        showLoader();
+        mopidy.library.search({'any': [query]}).then(function (data) {
+          results.artists = [];
+          for (var i = 0; i < data.length; i++) {
+            if (data[i].artists !== undefined) {
+              for (var j = 0; j < data[i].artists.length; j++) {
+                results.artists.push(data[i].artists[j]);
               }
             }
           }
-        }
-        results.tracks = [];
-        results.episodes = [];
-        results.stations = [];
-        for (var i = 0; i < data.length; i++) {
-          if (data[i].tracks !== undefined) {
-            for (var j = 0; j < data[i].tracks.length; j++) {
-              var track, artist, artists, album, length;
-              track = data[i].tracks[j];
-              album = track.album;
-              if (track.uri.indexOf('tunein:station:') === 0) {
-                results.stations.push(track);
-              } else if (track.uri.indexOf('podcast:') === 0) {
-                results.episodes.push(track);
-              } else {
-                artists = [];
-                $.each(track.artists, function(index, el) {
-                  artists.push(el.name);
-                });
-                track.artist = artists.join('/ ');
-                track.album_artist = album.artists[0].name;
-                track.album = album.name;
-                length = convertMS(track.length);
-                track.length = length.h !== 0 ? pad(length.h) + ':' : '' + pad(length.m) + ':' + pad(length.s);
-                results.tracks.push(track);
+          results.albums = [];
+          results.podcasts = [];
+          for (var i = 0; i < data.length; i++) {
+            if (data[i].albums !== undefined) {
+              for (var j = 0; j < data[i].albums.length; j++) {
+                var album, artist;
+                album = data[i].albums[j];
+                if (album.uri.indexOf('podcast:') === 0) {
+                  results.podcasts.push(album);
+                } else {
+                  artist = album.artists[0].name;
+                  album.album_artist = artist;
+                  results.albums.push(album);
+                }
               }
             }
           }
-        }
-        Session.set('results', results);
-        $('.loading-spinner').fadeOut();
-      });
-    }, 1000);
-  } else {
-    // Session.set('results', []);
+          results.tracks = [];
+          results.episodes = [];
+          results.stations = [];
+          for (var i = 0; i < data.length; i++) {
+            if (data[i].tracks !== undefined) {
+              for (var j = 0; j < data[i].tracks.length; j++) {
+                var track, artist, artists, album, length;
+                track = data[i].tracks[j];
+                album = track.album;
+                if (track.uri.indexOf('tunein:station:') === 0) {
+                  results.stations.push(track);
+                } else if (track.uri.indexOf('podcast:') === 0) {
+                  results.episodes.push(track);
+                } else {
+                  artists = [];
+                  $.each(track.artists, function(index, el) {
+                    artists.push(el.name);
+                  });
+                  track.artist = artists.join('/ ');
+                  if (album !== undefined && album.artists !== undefined) { // soundcloud different to spotify
+                    track.album_artist = album.artists[0].name;
+                  } else {
+                    track.album_artist = track.artists[0];
+                  }                
+                  track.album = album.name;
+                  length = convertMS(track.length);
+                  track.length = length.h !== 0 ? pad(length.h) + ':' : '' + pad(length.m) + ':' + pad(length.s);
+                  results.tracks.push(track);
+                }
+              }
+            }
+          }
+          Session.set('results', results);
+          showLoader(false);
+        });
+      }, 1000);
+    }
   }
 };
 

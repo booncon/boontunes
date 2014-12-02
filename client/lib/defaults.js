@@ -4,7 +4,7 @@ Session.setDefault('API_SECRET', '5826e369529277ce1e40d5ee5e017b39');
 
 // mopidy server details
 Session.setDefault('MOPIDY_URL', 'music.local');
-Session.setDefault('MOPIDY_PORT', 6680);
+Session.setDefault('MOPIDY_PORT', 80);
 
 // UI default values
 Session.setDefault('currentSongName', 'Unknown Title');

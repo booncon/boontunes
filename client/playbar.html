@@ -5,7 +5,7 @@
         <div class="col-xs-12">
           <div class="btn-group navbar-left" role="group">
             <button type="button" class="btn btn-default btn-link navbar-btn previousBtn glyphicon glyphicon-backward"></button>
-            <button type="button" class="btn btn-default btn-link navbar-btn playBtn glyphicon {{#unless playing}}glyphicon-pause{{else}}glyphicon-play{{/unless}}"></button>
+            <button type="button" class="btn btn-default btn-link navbar-btn playBtn glyphicon {{#if playing}}glyphicon-pause{{else}}glyphicon-play{{/if}}"></button>
             <button type="button" class="btn btn-default btn-link navbar-btn nextBtn glyphicon glyphicon-forward"></button>
             <span class="glyphicon glyphicon-refresh loading-spinner"></span>
           </div>

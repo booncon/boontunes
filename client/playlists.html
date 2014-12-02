@@ -6,14 +6,14 @@
       <div class="col-md-4 scroll-content">
         <div class="list-group">
         {{#each playlists}}
-          <a class="list-group-item playlist-item" data-uri="{{uri}}" href="#">{{name}}{{> actions}}</a>
+          <a class="list-group-item playlist-item action-item" data-uri="{{uri}}" href="#">{{name}}{{> actions}}</a>
         {{/each}}
         </div>
       </div>
       <div class="col-md-8 scroll-content">
         <div class="list-group">
         {{#each playlistSongs}}
-          <a class="list-group-item" data-uri="{{uri}}" href="#"><b>{{name}}</b><br>{{#each album.artists}}{{name}}{{/each}} – {{album.name}}{{> actions}}</a>
+          <a class="list-group-item action-item" data-uri="{{uri}}" href="#"><b>{{name}}</b><br>{{#each album.artists}}{{name}}{{/each}} – {{album.name}}{{> actions}}</a>
         {{/each}}
         </div>
       </div>
